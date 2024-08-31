@@ -22,7 +22,7 @@
 /* Anchor tag styling */
 a {
   font-weight: 500;
-  color: #000000;
+  color: #fdfdfd;
   text-decoration: inherit;
 }
 
@@ -32,7 +32,11 @@ a:hover {
 
 /* Body styling */
 
+body{
 
+  line-height: 1.5;
+  font-weight: 400;
+}
 
 /* Heading styling */
 h1 {

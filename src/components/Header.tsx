@@ -1,4 +1,4 @@
-import { useState, useEffect, ChangeEvent, FormEvent } from 'react';
+import React, { useState, useEffect, ChangeEvent, FormEvent } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import { CircleLoader } from 'react-spinners';
@@ -7,14 +7,19 @@ import axios from 'axios';
 import Logo from '../assets/Logo.png';
 import './Header.css';
 
-function Header() {
-  const [isOpen, setIsOpen] = useState(false);
-  const [isLoading, setIsLoading] = useState(false);
-  const [isDarkMode, setIsDarkMode] = useState(false);
-  const [isMessageFormOpen, setIsMessageFormOpen] = useState(false);
-  const [formData, setFormData] = useState({ name: '', email: '', message: '' });
-  const [serverMessage, setServerMessage] = useState('');
-  const [showPopup, setShowPopup] = useState(false); // State for popup visibility
+interface FormData {
+  name: string;
+  email: string;
+  message: string;
+}
+
+const Header: React.FC = () => {
+  const [isOpen, setIsOpen] = useState<boolean>(false);
+  const [isLoading, setIsLoading] = useState<boolean>(false);
+  const [isMessageFormOpen, setIsMessageFormOpen] = useState<boolean>(false);
+  const [formData, setFormData] = useState<FormData>({ name: '', email: '', message: '' });
+  const [serverMessage, setServerMessage] = useState<string>('');
+  const [showPopup, setShowPopup] = useState<boolean>(false);
   const location = useLocation();
 
   useEffect(() => {
@@ -26,20 +31,19 @@ function Header() {
     return () => clearTimeout(timer);
   }, [location]);
 
-  const toggleMenu = () => setIsOpen(!isOpen);
-  const toggleTheme = () => setIsDarkMode(!isDarkMode);
-  const toggleMessageForm = () => setIsMessageFormOpen(!isMessageFormOpen);
+  const toggleMenu = (): void => setIsOpen(!isOpen);
+  const toggleMessageForm = (): void => setIsMessageFormOpen(!isMessageFormOpen);
 
-  const getLinkClass = (path: string) => {
+  const getLinkClass = (path: string): string => {
     return `hover:text-red-500 ${location.pathname === path ? 'text-red-500 font-bold' : ''}`;
   };
 
-  const handleInputChange = (e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+  const handleInputChange = (e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>): void => {
     const { id, value } = e.target;
     setFormData(prevState => ({ ...prevState, [id]: value }));
   };
 
-  const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
+  const handleSubmit = async (e: FormEvent<HTMLFormElement>): Promise<void> => {
     e.preventDefault();
     setServerMessage('');
     try {
@@ -48,7 +52,7 @@ function Header() {
       setServerMessage(response.data.message || 'Message sent successfully!');
       setIsMessageFormOpen(false);
       setFormData({ name: '', email: '', message: '' });
-      showPopupMessage(); // Show popup on success
+      showPopupMessage();
     } catch (error) {
       console.error('Error sending message:', error);
       if (axios.isAxiosError(error) && error.response) {
@@ -56,21 +60,21 @@ function Header() {
       } else {
         setServerMessage('An unexpected error occurred.');
       }
-      showPopupMessage(); // Show popup on error
+      showPopupMessage();
     }
   };
 
-  const showPopupMessage = () => {
+  const showPopupMessage = (): void => {
     setShowPopup(true);
     setTimeout(() => {
       setShowPopup(false);
-    }, 5000); // Hide after 5 seconds
+    }, 5000);
   };
 
   return (
     <>
       <motion.header 
-        className={`${isDarkMode ? 'bg-gray-800 text-white' : 'bg-white text-gray-800'} shadow-md relative z-10`}
+        className="bg-gray-800 text-white shadow-md relative z-10"
         initial={{ y: -100 }}
         animate={{ y: 0 }}
         transition={{ type: 'spring', stiffness: 100, damping: 20 }}
@@ -91,7 +95,7 @@ function Header() {
             animate={{ opacity: 1, y: 0 }}
             transition={{ staggerChildren: 0.1, delayChildren: 0.2 }}
           >
-            {['/', '/about', '/contact', '/Services', '/Portfolio'].map((path) => (
+            {['/', '/about', '/Portfolio'].map((path) => (
               <motion.div 
                 key={path}
                 initial={{ opacity: 0, y: -10 }}
@@ -102,14 +106,6 @@ function Header() {
                 </Link>
               </motion.div>
             ))}
-            <motion.button
-              onClick={toggleTheme}
-              className="ml-4 focus:outline-none"
-              whileHover={{ scale: 1.1 }}
-              whileTap={{ scale: 0.9 }}
-            >
-              {isDarkMode ? '☀️' : '🌙'}
-            </motion.button>
             <motion.button
               onClick={toggleMessageForm}
               className="ml-4 focus:outline-none"
@@ -124,8 +120,8 @@ function Header() {
             whileHover={{ scale: 1.1 }}
             whileTap={{ scale: 0.9 }}
           >
-            <button onClick={toggleTheme} className="mr-4 focus:outline-none">
-              {isDarkMode ? '☀️' : '🌙'}
+            <button onClick={toggleMessageForm} className="mr-4 focus:outline-none">
+              <AiOutlineMessage size={24} />
             </button>
             <button onClick={toggleMenu} className="focus:outline-none">
               <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
@@ -137,13 +133,13 @@ function Header() {
         <AnimatePresence>
           {isOpen && (
             <motion.div 
-              className={`md:hidden ${isDarkMode ? 'bg-gray-800 text-white' : 'bg-white text-gray-800'}`}
+              className="md:hidden bg-gray-800 text-white"
               initial={{ opacity: 0, height: 0 }}
               animate={{ opacity: 1, height: 'auto' }}
               exit={{ opacity: 0, height: 0 }}
             >
               <nav className="flex flex-col space-y-2 px-4 pb-4">
-                {['/', '/about', '/contact'].map((path) => (
+                {['/', '/about','/portfolio'].map((path) => (
                   <motion.div 
                     key={path}
                     whileHover={{ scale: 1.05 }}
@@ -167,7 +163,7 @@ function Header() {
       <AnimatePresence>
         {isLoading && (
           <motion.div 
-            className={`fixed inset-0 ${isDarkMode ? 'bg-black opacity-20' : 'bg-gray-100'} bg-opacity-50 flex justify-center items-center z-50`}
+            className="fixed inset-0 bg-black opacity-20 flex justify-center items-center z-50"
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
@@ -178,7 +174,7 @@ function Header() {
               exit={{ scale: 0 }}
               transition={{ type: 'spring', stiffness: 300, damping: 20 }}
             >
-              <CircleLoader color={isDarkMode ? "#FFFFFF" : "#000000"} size={60} />
+              <CircleLoader color="#FFFFFF" size={60} />
             </motion.div>
           </motion.div>
         )}
@@ -193,7 +189,7 @@ function Header() {
             exit={{ opacity: 0 }}
           >
             <motion.div
-              className={`bg-white p-6 rounded-lg shadow-lg w-full max-w-md ${isDarkMode ? 'bg-gray-800 text-white' : 'bg-white text-gray-800'}`}
+              className="bg-gray-800 text-white p-6 rounded-lg shadow-lg w-full max-w-md"
               initial={{ scale: 0.9 }}
               animate={{ scale: 1 }}
               exit={{ scale: 0.9 }}
@@ -208,7 +204,7 @@ function Header() {
                     id="name"
                     value={formData.name}
                     onChange={handleInputChange}
-                    className="w-full p-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-red-500"
+                    className="w-full p-2 border border-gray-600 rounded focus:outline-none focus:ring-2 focus:ring-red-500 bg-gray-700 text-white"
                     placeholder="Enter your name"
                     required
                   />
@@ -220,7 +216,7 @@ function Header() {
                     id="email"
                     value={formData.email}
                     onChange={handleInputChange}
-                    className="w-full p-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-red-500"
+                    className="w-full p-2 border border-gray-600 rounded focus:outline-none focus:ring-2 focus:ring-red-500 bg-gray-700 text-white"
                     placeholder="Enter your email"
                     required
                   />
@@ -231,7 +227,7 @@ function Header() {
                     id="message"
                     value={formData.message}
                     onChange={handleInputChange}
-                    className="w-full p-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-red-500"
+                    className="w-full p-2 border border-gray-600 rounded focus:outline-none focus:ring-2 focus:ring-red-500 bg-gray-700 text-white"
                     placeholder="Enter your message"
                     required
                   />
@@ -246,7 +242,7 @@ function Header() {
                   <button
                     type="button"
                     onClick={toggleMessageForm}
-                    className="ml-2 bg-gray-300 text-gray-800 px-4 py-2 rounded hover:bg-gray-400 focus:outline-none focus:ring-2 focus:ring-gray-500"
+                    className="ml-2 bg-gray-600 text-white px-4 py-2 rounded hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-gray-500"
                   >
                     Cancel
                   </button>
@@ -260,7 +256,7 @@ function Header() {
       <AnimatePresence>
         {showPopup && (
           <motion.div
-            className={`fixed bottom-4 right-4 bg-white p-4 rounded shadow-lg ${isDarkMode ? 'bg-gray-800 text-white' : 'bg-white text-gray-800'}`}
+            className="fixed bottom-4 right-4 bg-gray-800 text-white p-4 rounded shadow-lg"
             initial={{ opacity: 0, translateY: 20 }}
             animate={{ opacity: 1, translateY: 0 }}
             exit={{ opacity: 0, translateY: 20 }}
@@ -272,6 +268,6 @@ function Header() {
       </AnimatePresence>
     </>
   );
-}
+};
 
 export default Header;

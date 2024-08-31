@@ -22,7 +22,7 @@ function Home() {
           animate={{ opacity: 1 }}
           transition={{ delay: 0.5, duration: 0.8 }}
         >
-          Hi, I'm Denny, I'm a TECHNICIAN and an ENGINEER.
+          Hi, I'm Denny, I'm a Video Distribution Manager and Content Distribution Specialist.
         </motion.p>
         
         <motion.div 
