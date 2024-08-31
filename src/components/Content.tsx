@@ -8,10 +8,10 @@ const content = {
         sub_content: 'Let\'s work together to develop a digital future'
     },
     social: {
-        facebook: 'https://www.facebook.com/manzi.prince',
-        twitter: 'https://www.twitter.com/manzi_prince',
-        linkedin: 'https://www.linkedin.com/in/manzi-prince-5b4916197/',
-        Instagram:'https://www.instagram.com/prince_manzi1/',
+        facebook: 'https://www.facebook.com/',
+        twitter: 'https://www.twitter.com/',
+        linkedin: 'https://www.linkedin.com/in//',
+        Instagram:'https://www.instagram.com/denalio_/',
         github: 'https://github.com/'
     },
     contact: {
