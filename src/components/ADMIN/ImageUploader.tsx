@@ -1,26 +1,33 @@
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import axios from 'axios';
 
 const ImageUploader = () => {
-  const [image, setImage] = useState(null);
-  const [description, setDescription] = useState('');
-  const [imageUrl, setImageUrl] = useState('');
-  const [message, setMessage] = useState('');
-  const [imageId, setImageId] = useState('');
+  const [image, setImage] = useState<File | null>(null);
+  const [description, setDescription] = useState<string>('');
+  const [imageUrl, setImageUrl] = useState<string>('');
+  const [message, setMessage] = useState<string>('');
+  const [imageId, setImageId] = useState<string>('');
 
   useEffect(() => {
-  
+    // Optionally, you can fetch some initial data here if needed
   }, []);
 
-  const handleFileChange = (e) => {
-    setImage(e.target.files[0]);
+  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    if (e.target.files) {
+      setImage(e.target.files[0]);
+    }
   };
 
-  const handleDescriptionChange = (e) => {
+  const handleDescriptionChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setDescription(e.target.value);
   };
 
   const handleUpload = async () => {
+    if (!image) {
+      setMessage('No image selected');
+      return;
+    }
+
     const formData = new FormData();
     formData.append('img', image);
     formData.append('description', description);

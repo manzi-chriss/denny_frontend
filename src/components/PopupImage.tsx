@@ -1,7 +1,11 @@
-import React from 'react';
 import { motion } from 'framer-motion';
 
-function PopupImage({ selectedImage, closePopUp }) {
+type PopupImageProps = {
+  selectedImage: string;
+  closePopUp: () => void;
+};
+
+function PopupImage({ selectedImage, closePopUp }: PopupImageProps) {
   return (
     <motion.div 
       className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-75 z-50"

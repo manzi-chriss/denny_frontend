@@ -1,4 +1,4 @@
-import React, { useState, useEffect, ChangeEvent, FormEvent } from 'react';
+import { useState, useEffect, ChangeEvent, FormEvent } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import { CircleLoader } from 'react-spinners';
@@ -43,8 +43,7 @@ function Header() {
     e.preventDefault();
     setServerMessage('');
     try {
-      const response = await axios.post('http://localhost:3000/message/us', formData);
-      const message =
+      const response = await axios.post('https://denny-backend.onrender.com/message/us', formData);
       console.log('Message sent:', response.data);
       setServerMessage(response.data.message || 'Message sent successfully!');
       setIsMessageFormOpen(false);

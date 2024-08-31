@@ -1,14 +1,13 @@
-import React from 'react';
-import Axios from 'axios';
+import Axios, { AxiosError } from 'axios';
 import '../../index.css'
 
 function LoginPage() {
-  const handleSubmit = async (event) => {
+  const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => { // Type for event
     event.preventDefault(); 
-    const email = event.target.email.value;
-    const password = event.target.password.value;
+    const email = event.currentTarget.email.value;
+    const password = event.currentTarget.password.value;
     try {
-      const response = await Axios.post('http://localhost:3000/api/login', { email, password });
+      const response = await Axios.post('https://denny-backend.onrender.com/api/login', { email, password });
       console.log(response.data);
       
       if (response.data.token) {
@@ -23,8 +22,8 @@ function LoginPage() {
     } catch (error) {
       console.error(error);
       
-      // Check for specific error message or status code
-      if (error.response && error.response.status === 401) {
+      // Use type assertion to assume the error is an AxiosError
+      if (error instanceof AxiosError && error.response && error.response.status === 401) {
         alert('Invalid credentials. Please try again.');
       } else {
         alert('An error occurred. Please try again later.');

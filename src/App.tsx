@@ -1,4 +1,4 @@
-import { BrowserRouter as Router, Route, Routes, Navigate } from 'react-router-dom'; // Import Navigate
+import { BrowserRouter as Router, Route, Routes, Navigate } from 'react-router-dom';
 import Home from './components/Home';
 import About from './components/About';
 import Contact from './components/Contact';
@@ -12,17 +12,16 @@ import AdminDash from './components/ADMIN/AdminDash';
 import Upload_new_link from './components/Upload_new_link';
 import LoginPage from './components/LogIn';
 
-
 function App() {
-  const token = localStorage.getItem('react_project_1234'); // Ensure the correct key is used
+  const token = localStorage.getItem('react_project_1234');
 
   function verifyToken() {
-    return !!token; // Simplified token verification
+    return !!token;
   }
 
   return (
     <Router>
-      <ThemeProvider> {/* Wrap your entire application with ThemeProvider */}
+      <ThemeProvider>
         <div>
           <Header />
           <Routes>
@@ -33,10 +32,10 @@ function App() {
             <Route path="/contact" element={<Contact />} />
             <Route path="/upload-link" element={<Upload_new_link />} />
             <Route 
-              exact path="/admin" 
+              path="/admin" 
               element={verifyToken() ? <AdminDash /> : <Navigate to="/login" />} 
             />
-            <Route path="/login" element={<LoginPage />} /> {/* Route for LoginPage */}
+            <Route path="/login" element={<LoginPage />} />
             <Route path="*" element={<Underdevelopment />} />
           </Routes>
           <Footer />

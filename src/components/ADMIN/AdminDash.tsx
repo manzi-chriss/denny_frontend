@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import axios from 'axios';
 import Header from './Header';
 import MobileMenu from './MobileMenu';
@@ -9,9 +9,19 @@ import Messages from './Messages';
 import ImageUploader from './ImageUploader';
 import { FaSignOutAlt } from 'react-icons/fa';
 
+// Define the DashboardMessage interface with all required properties
+interface DashboardMessage {
+  _id: string;
+  text: string;
+  name: string;
+  email: string;
+  message: string;  // Added this line
+  // Add other properties as needed
+}
+
 function AdminDash() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
-  const [messages, setMessages] = useState([]);
+  const [messages, setMessages] = useState<DashboardMessage[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
@@ -20,7 +30,7 @@ function AdminDash() {
     { name: 'Users', path: '/users' },
     { name: 'Orders', path: '/orders' },
     { name: 'Products', path: '/products' },
-    { name: 'Settings', path: '/settings' }
+    { name: 'Settings', path: '/settings' },
   ];
 
   const statsItems = [
@@ -34,8 +44,13 @@ function AdminDash() {
     const fetchMessages = async () => {
       setLoading(true);
       try {
-        const response = await axios.get('http://localhost:3000/message/us');
-        setMessages(response.data);
+        const response = await axios.get('https://denny-backend.onrender.com/message/us');
+        setMessages(
+          response.data.map((msg: any) => ({
+            ...msg,
+            message: msg.text, // Map `text` to `message`
+          }))
+        );
       } catch (err) {
         console.error('Error fetching messages:', err);
         setError('Failed to fetch messages');
@@ -49,8 +64,8 @@ function AdminDash() {
 
   const handleDelete = async (id: string) => {
     try {
-      await axios.delete(`http://localhost:3000/message/us/${id}`);
-      setMessages(messages.filter(message => message._id !== id));
+      await axios.delete(`https://denny-backend.onrender.com/message/us/${id}`);
+      setMessages(messages.filter((message) => message._id !== id));
     } catch (err) {
       console.error('Error deleting message:', err);
       setError('Failed to delete message');

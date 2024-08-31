@@ -1,11 +1,14 @@
-import React from 'react';
 import { motion } from 'framer-motion';
 import PIC1 from '../assets/img/Denny1.jpg';
 import PIC2 from '../assets/img/Denny2.jpg';
 import PIC3 from '../assets/img/Denny3.jpg';
 import '../../index.css'
 
-function ImageGallery({ openPopUp }) {
+type ImageGalleryProps = {
+  openPopUp: (image: string) => void;
+};
+
+function ImageGallery({ openPopUp }: ImageGalleryProps) {
   const images = [PIC1, PIC2, PIC3, 'https://example.com/image4.jpg'];
 
   return (

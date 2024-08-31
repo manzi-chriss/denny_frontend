@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { motion, useAnimation } from 'framer-motion';
 import axios from 'axios';
 import ImageGallery from './ImageGallery';
@@ -11,17 +11,10 @@ function Portfolio() {
   const [isPopUpVisible, setIsPopUpVisible] = useState(false);
   const cubeControl = useAnimation();
 
-  const images = [
-    '../assets/img/Denny1.jpg',
-    '../assets/img/Denny2.jpg',
-    '../assets/img/Denny3.jpg',
-    'https://example.com/image4.jpg'
-  ];
-
   useEffect(() => {
     const fetchVideos = async () => {
       try {
-        const response = await axios.get('http://localhost:3000/upload');
+        const response = await axios.get('https://denny-backend.onrender.com/upload');
         setVideos(response.data.videos);
       } catch (error) {
         console.error(error);
@@ -61,7 +54,7 @@ function Portfolio() {
           My Portfolio
         </motion.h1>
 
-        <ImageGallery images={images} openPopUp={openPopUp} />
+        <ImageGallery openPopUp={openPopUp} />
 
         <section>
           <h2 className="text-3xl font-semibold mb-8 text-center bg-clip-text text-transparent bg-gradient-to-r from-green-400 via-blue-500 to-purple-500">

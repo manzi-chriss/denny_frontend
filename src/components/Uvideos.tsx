@@ -1,7 +1,16 @@
-import React from 'react';
 import { motion } from 'framer-motion';
 
-function Uvideos({ videos }) {
+type Video = {
+  videoId: string;
+  title: string;
+  description: string;
+};
+
+type UvideosProps = {
+  videos: Video[];
+};
+
+function Uvideos({ videos }: UvideosProps) {
   return (
     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
       {videos.length ? (
