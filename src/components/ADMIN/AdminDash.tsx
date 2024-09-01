@@ -9,14 +9,11 @@ import Messages from './Messages';
 import ImageUploader from './ImageUploader';
 import { FaSignOutAlt } from 'react-icons/fa';
 
-// Define the DashboardMessage interface with all required properties
 interface DashboardMessage {
   _id: string;
-  text: string;
   name: string;
   email: string;
-  message: string;  // Added this line
-  // Add other properties as needed
+  message: string;
 }
 
 function AdminDash() {
@@ -45,12 +42,7 @@ function AdminDash() {
       setLoading(true);
       try {
         const response = await axios.get('https://denny-backend.onrender.com/message/us');
-        setMessages(
-          response.data.map((msg: any) => ({
-            ...msg,
-            message: msg.text, // Map `text` to `message`
-          }))
-        );
+        setMessages(response.data); // Directly set the response data as messages
       } catch (err) {
         console.error('Error fetching messages:', err);
         setError('Failed to fetch messages');
